@@ -1,0 +1,7 @@
+{
+  "name": "AIWorldGenerationAPI",
+  "description": "AI World Generation API",
+  "version": "0.4.2",
+  "serverIp": "127.0.0.1",
+  "serverPort": 9000
+}

@@ -1,0 +1,9 @@
+# Optional requirements
+
+# Speech-to-text
+PyAudio~=0.2.14
+datasets~=2.18.0
+
+# Text-to-sound
+# Installation won't work, see https://github.com/facebookresearch/audiocraft?tab=readme-ov-file#installation
+# audiocraft~=1.2.0
