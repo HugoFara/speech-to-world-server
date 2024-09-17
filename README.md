@@ -74,7 +74,7 @@ you need ffmpeg, portaudio and pyaudio:
 
 Each file can be executed independently, so they are as many entry points as files.
 The package is structured as a Python module, 
-you either need to run commands from the ``speech-to-world`` folder,
+you either need to run commands from the ``speech_to_world`` folder,
 or to install the module locally.
 
 The most common use cases are the following:
@@ -88,7 +88,7 @@ Next is the detail for special files.
 
 ### Image generation
 
-Image generation features are in the ``speech-to-world/skybox`` folder.
+Image generation features are in the ``speech_to_world/skybox`` folder.
 
 1. diffusion.py - base module to create an image from a diffusion model.
 2. inpainting.py - implements an inpainting model.
@@ -99,7 +99,7 @@ The result is usually passed to inpainting functions.
 
 ### 3D features
 
-3D features are in the ``speech-to-world/environment`` folder.
+3D features are in the ``speech_to_world/environment`` folder.
 It is still in active development at the time of writing (September 2024), 
 hence the following is subject to change.
 
@@ -114,14 +114,14 @@ Yet not integrated in the main code base.
 
 ### Speech-to-text (ASR)
 
-For speech-to-text features, go to ``speech-to-world/asr`` (automatic speech recognition) 
+For speech-to-text features, go to ``speech_to_world/asr`` (automatic speech recognition) 
 
 * speech_to_text.py - implements an Automatic Speech Recognition (ASR) model.
 * asr_demo.py - simply a demo, you can either use your microphone or load the dataset
 
 ### Server
 
-The server features are in `speech-to-world/server`. See [Start as a TCP server](#start-as-a-tcp-server) for the details on usage.
+The server features are in `speech_to_world/server`. See [Start as a TCP server](#start-as-a-tcp-server) for the details on usage.
 
 * run.py - starts a TCP server, able to serve requests to the previously defined models.
 * task_tracker.py - Just a class adding syntactic suger to track a task easily
@@ -138,8 +138,8 @@ The explanation for each workflow is detailed in [ComfyUI/README.md](ComfyUI/REA
 
 ### Other Features
 
-* As a test, the ``speech-to-world/sound`` folder has some experiments with sound generation.
-* The ``speech-to-world/utils`` folder contains useful functions for the user:
+* As a test, the ``speech_to_world/sound`` folder has some experiments with sound generation.
+* The ``speech_to_world/utils`` folder contains useful functions for the user:
   * download_models.py - downloads useful models for the server. It does not download all models.
 
 ## Configuration
