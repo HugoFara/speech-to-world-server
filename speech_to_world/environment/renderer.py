@@ -15,7 +15,7 @@ from PIL import Image
 try:
     import open3d
 except ModuleNotFoundError as err:
-    # open3d unnused/not compatible with Python 3.12
+    # open3d unused/not compatible with Python 3.12
     warnings.warn("open3d not found, not using it")
     open3d = None
 import scipy

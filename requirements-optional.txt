@@ -7,3 +7,6 @@ datasets~=2.18.0
 # Text-to-sound
 # Installation won't work, see https://github.com/facebookresearch/audiocraft?tab=readme-ov-file#installation
 # audiocraft~=1.2.0
+
+# 3D mesh creation
+open3d~=0.18.0
