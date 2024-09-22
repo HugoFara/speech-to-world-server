@@ -105,12 +105,13 @@ hence the following is subject to change.
 
 1. depth_generation.py - provides a model to come from a standard RGB image and create a depth map.
 2. point_cloud_pipeline.py - uses the RGBD to create a point cloud, and converts it to a mesh.
-3. mesh_pipeline.py - uses the RGBD image and representation features to create a terrain mesh. 
-4. mask_former.py - semantic segmentation of an RGB image. 
-5. image_segmentation.py - uses an RGBD+semantic image to isolate the main elements.
-6. depth_inpainting.py - combines inpainting controlled by depth data to recreate parts of a terrain.
-Yet not integrated in the main code base.
-7. rendered.py - create a 3D view for the terrain, not finished yet.
+3. mesh_pipeline.py - uses the RGBD image and representation features to create a terrain mesh.
+4. mesh_transformations.py - direct creation of 3D meshes as objects. 
+5. mask_former.py - semantic segmentation of an RGB image. 
+6. image_segmentation.py - uses an RGBD+semantic image to isolate the main elements. 
+7. depth_inpainting.py - combines inpainting controlled by depth data to recreate parts of a terrain.
+Yet not integrated in the main code base. 
+8. renderer.py - create a 3D view for the terrain, not finished yet.
 
 ### Speech-to-text (ASR)
 

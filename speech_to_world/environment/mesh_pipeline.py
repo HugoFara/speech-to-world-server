@@ -1,15 +1,10 @@
 """
 Functions to generate a mesh from an RGBD image.
-"""
-import warnings
 
+This module aims at the creation of a mesh by "impression".
+"""
 import numpy as np
-try:
-    import open3d
-except ModuleNotFoundError as err:
-    # open3d unused/not compatible with Python 3.12
-    warnings.warn("open3d not found, not using it")
-    open3d = None
+import open3d
 import torch
 
 
@@ -178,16 +173,16 @@ def mesh_impression_pipeline(depth_map, max_resolution=256, texture_image=None):
     # Create the mesh
     vertices, triangles = create_mesh_geometry(max_resolution, np.asarray(depth_map))
 
-    mesh = o3d.geometry.TriangleMesh(
-        o3d.utility.Vector3dVector(vertices), o3d.utility.Vector3iVector(triangles)
+    mesh = open3d.geometry.TriangleMesh(
+        open3d.utility.Vector3dVector(vertices), open3d.utility.Vector3iVector(triangles)
     )
 
     # Load a texture image (change the file path accordingly)
     v_uv = generate_uv(triangles, vertices)
-    mesh.triangle_uvs = o3d.utility.Vector2dVector(v_uv)
+    mesh.triangle_uvs = open3d.utility.Vector2dVector(v_uv)
 
     if texture_image is not None:
-        texture_image = o3d.io.read_image(texture_image)
+        texture_image = open3d.io.read_image(texture_image)
         mesh.textures = [texture_image]
 
     mesh.compute_vertex_normals()

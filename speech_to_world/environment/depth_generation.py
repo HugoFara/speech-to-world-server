@@ -1,5 +1,10 @@
 """
-Generate an RGBD image from a simgle image.
+Generate an RGBD image from a single image.
+
+Currently, using marigold-v1-0 (https://huggingface.co/prs-eth/marigold-v1-0)
+
+Source code:
+https://github.com/huggingface/diffusers/tree/main/examples/community#marigold-depth-estimation
 """
 
 from PIL import Image
