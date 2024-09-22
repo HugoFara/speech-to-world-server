@@ -7,6 +7,8 @@ Source code:
 https://github.com/huggingface/diffusers/tree/main/examples/community#marigold-depth-estimation
 """
 
+import os
+import importlib
 import warnings
 
 import matplotlib.pyplot as plt
@@ -23,15 +25,14 @@ from skimage.restoration.inpaint import inpaint_biharmonic
 
 from ..skybox.inpainting import inpaint_image
 from .depth_generation import get_depth
-
 from .mesh_pipeline import mesh_impression_pipeline
-from .image_segmentation import (
-    segment_anything,
-    crop_to_mask,
-    force_monotonous,
-    increasing_depth,
-)
+from . import image_segmentation as im_seg
 from .depth_inpainting import inpaint_depth_controlled
+
+# Parent directory,
+PARENT_DIR = os.path.abspath(os.path.join(importlib.util.find_spec(__name__).origin, os.pardir))
+# Generated files folder
+OUTPUTS_FOLDER = os.path.join(PARENT_DIR, "outputs")
 
 
 def cylindrical_projection(flat_vertices, total_angle):
@@ -149,8 +150,8 @@ def save_mesh(mesh, filename, view=False):
     Example usage:
 
     ```python
-    mesh = generate_mesh("sunny_mountain.png", "outputs/3D view.obj", "outputs/depth_map.png")
-    save_mesh(mesh, "outputs/3D view.obj", view=True)
+    mesh = generate_mesh("sunny_mountain.png", OUTPUTS_FOLDER + "/3D view.obj", OUTPUTS_FOLDER + "/depth_map.png")
+    save_mesh(mesh, OUTPUTS_FOLDER + "/3D view.obj", view=True)
     ```
     """
     # Disable texture for visualization
@@ -240,7 +241,7 @@ def generate_mesh(texture, depth_map, resolution=256):
     Example usage:
 
     ```python
-    generate_mesh("sunny_mountain.png", "outputs/3D view.obj", "outputs/depth_map.png")
+    generate_mesh("sunny_mountain.png", OUTPUTS_FOLDER + "/3D view.obj", OUTPUTS_FOLDER + "/depth_map.png")
     ```
     """
     # To use the point cloud alternative: mesh = environment.point_cloud_pipeline(input_image, depth_map)
@@ -269,7 +270,7 @@ def mesh_panorama_from_files(
     Example usage:
 
     ```python
-    mesh_panorama_from_files("sunny_mountain.png", "outputs/3D view.obj", "outputs/depth_map.png")
+    mesh_panorama_from_files("sunny_mountain.png", OUTPUTS_FOLDER + "/3D view.obj", OUTPUTS_FOLDER + "/depth_map.png")
     ```
     """
     if depth_image is None:
@@ -301,7 +302,7 @@ def segment_stuff(image_path, depth_path=None):
     Example usage:
 
     ```python
-    skybox_mask = mask_skybox("../sunny_mountain.png", "sunny_depth_map.png")
+    skybox_mask = mask_skybox("../sunny_mountain.png", "sunny_depth_map.npy")
     plt.imshow(skybox_mask)
     plt.show()
     ```
@@ -309,11 +310,14 @@ def segment_stuff(image_path, depth_path=None):
     image = Image.open(image_path)
     if depth_path is None:
         depth_map = get_depth(image)
+    elif depth_path.endswith(".npy"):
+        depth_map = np.load(depth_path)
     else:
         # Image im I;16 format with depth on 16 bits.
-        depth_map = np.asarray(open3d.io.read_image(depth_path)) / (2**16 - 1)
-        np.save("depth.npy", depth_map)
-    return segment_anything(image, depth_map)
+        depth_map = np.asarray(Image.open(depth_path)) / (2**16 - 1)
+        np.save(OUTPUTS_FOLDER + "/depth.npy", depth_map)
+
+    return im_seg.segment_anything(image, depth_map)
 
 
 def mask_image(image, mask):
@@ -326,7 +330,7 @@ def mask_image(image, mask):
 
 def filling_strategy(image_np, large_mask):
     """Create a very large image with many mirrored views."""
-    cropped = crop_to_mask(image_np, large_mask)
+    cropped = im_seg.crop_to_mask(image_np, large_mask)
     # Fill holes
 
     # Map in big size
@@ -394,7 +398,7 @@ def inpaint_ground(image, image_np, depth_map, ground, filling_mask):
     complete_ground = inpaint_image("the ground", inpainted_ground, filling_mask)[0]
     complete_ground.show()
     print("Completing ground with controlnet")
-    ground_depth = 1 - increasing_depth(force_monotonous(depth_map))
+    ground_depth = 1 - im_seg.increasing_depth(im_seg.force_monotonous(depth_map))
     complete_ground_controlled = inpaint_depth_controlled(
         inpainted_ground,
         filling_mask,
@@ -441,8 +445,8 @@ def complete_segments(image, depth_map, skybox, ground, objects):
     # Save the objects
     for i in range(int(np.max(objects)) + 1):
         mask = objects == i
-        cropping = crop_to_mask(image_np, mask)
-        depth = crop_to_mask(depth_map, mask)
+        cropping = im_seg.crop_to_mask(image_np, mask)
+        depth = im_seg.crop_to_mask(depth_map, mask)
         # Handle occlusions
         objects_data.append((cropping, depth))
     warnings.warn("Objects occlusions cannot be handled yet.")
@@ -460,13 +464,13 @@ def save_as_scene(skybox, terrain, depth_map, _objects):
     :param _objects: Objects to save.
     :type _objects: list[tuple[PIL.Image.Image, numpy.ndarray]]
     """
-    skybox_path = "outputs/complete_skybox.png"
-    skybox.save("outputs/complete_skybox.png")
+    skybox_path = OUTPUTS_FOLDER + "/complete_skybox.png"
+    skybox.save(OUTPUTS_FOLDER + "/complete_skybox.png")
     print("Saved the skybox under " + skybox_path)
-    terrain_texture_path = "outputs/terrain_texture.png"
+    terrain_texture_path = OUTPUTS_FOLDER + "/terrain_texture.png"
     terrain.save(terrain_texture_path)
     terrain_mesh = generate_mesh(open3d.io.read_image(terrain_texture_path), depth_map)
-    terrain_mesh_path = "outputs/terrain_mesh.obj"
+    terrain_mesh_path = OUTPUTS_FOLDER + "/terrain_mesh.obj"
     save_mesh(terrain_mesh, terrain_mesh_path)
     print("Saved the mesh under " + terrain_mesh_path)
     warnings.warn("Objects are not handled yet.")
@@ -475,28 +479,30 @@ def save_as_scene(skybox, terrain, depth_map, _objects):
 if __name__ == "__main__":
     """
     # To generate a new mesh
-    mesh_panorama_from_files("../sunny_mountain.png", "outputs/sunny 3D.obj", "outputs/sunny_depth_map.png")
+    # mesh_panorama_from_files("../sunny_mountain.png", OUTPUTS_FOLDER + "/sunny 3D.obj", OUTPUTS_FOLDER + "/sunny_depth_map.png")
+    
+    # Skybox mask only
+    # skybox_mask = im_seg.mask_skybox("../sunny_mountain.png", OUTPUTS_FOLDER + "/depth_map.png")
 
     # To regenerate data
     skybox, ground, objects = segment_stuff(
-        "../sunny_mountain.png", "sunny_depth_map.png"
+        os.path.join(PARENT_DIR, '../sunny_mountain.png'),
+        os.path.join(PARENT_DIR, 'sunny_depth_map.png'),
     )
 
-    # Skybox mask only
-    skybox_mask = mask_skybox("../forest.png", "outputs/depth_map.png")
-
     # Save the data to files
-    np.save("outputs/skybox.npy", skybox)
-    np.save("outputs/ground.npy", ground)
-    np.save("outputs/objects.npy", objects)
+    np.save(OUTPUTS_FOLDER + "/skybox.npy", skybox)
+    np.save(OUTPUTS_FOLDER + "/ground.npy", ground)
+    np.save(OUTPUTS_FOLDER + "/objects.npy", objects)
     """
-    SKYBOX = np.load("outputs/skybox.npy")
-    GROUND = np.load("outputs/ground.npy")
-    OBJECTS = np.load("outputs/objects.npy")
+
+    SKYBOX = np.load(OUTPUTS_FOLDER + "/skybox.npy")
+    GROUND = np.load(OUTPUTS_FOLDER + "/ground.npy")
+    OBJECTS = np.load(OUTPUTS_FOLDER + "/objects.npy")
 
     complete_segments(
-        Image.open("../sunny_mountain.png"),
-        np.asarray(open3d.io.read_image("sunny_depth_map.png")) / (2**16 - 1),
+        Image.open(os.path.join(PARENT_DIR, '../sunny_mountain.png')),
+        np.asarray(Image.open(os.path.join(PARENT_DIR, 'sunny_depth_map.png'))) / (2**16 - 1),
         SKYBOX,
         GROUND,
         OBJECTS,
