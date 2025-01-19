@@ -1,6 +1,10 @@
-# Speech-to-world, Python Server
+# Speech-to-World, Python Server
 
-A Python project to create VR environments using Generative AI.
+Speech-to-World is a pipeline to create VR environments from a text prompt.
+It is *not* an AI model, but a way to coordinate several AI models to achieve a specific task,
+a bit like ComfyUI  lets you create pipelines for image generation.
+
+This repository is a Python project to create VR environments using Generative AI.
 You can run it as a TCP server to interface it with a [Unity client](https://github.com/HugoFara/speech-to-world-unity-client),
 to get the fully-fledged AI/VR application.
 
@@ -8,7 +12,7 @@ This is a use case of generative AI to build a complete VR scenery.
 
 ## Requirements
 
-- Python 3.10.12+
+- Python 3.10.12+.
 - A CUDA-compatible graphic card and at least 12 GB of VRAM. This version is compatible with [CUDA 12.1](https://developer.nvidia.com/cuda-12-1-0-download-archive).
 - Up to 15 GB of storage for the models.
 
@@ -174,10 +178,10 @@ This project includes several artificial neural network models.
 If you want to substitute a model by another one, you should have a good knowledge of what you are doing,
 otherwise the quality of the end product may be decreased.
 
-- Image creation : [Stable Diffusion XL base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) and 
+- Image creation: [Stable Diffusion XL base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) and 
 [Stable Diffusion XL refiner 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0).
-- Inpainting and outpainting : [Stable Diffusion XL 1.0 Inpainting 0.1](https://huggingface.co/diffusers/stable-diffusion-xl-1.0-inpainting-0.1).
-- Speech-to-text and translation : [Whisper Large v3](https://huggingface.co/openai/whisper-large-v3).
+- Inpainting and outpainting: [Stable Diffusion XL 1.0 Inpainting 0.1](https://huggingface.co/diffusers/stable-diffusion-xl-1.0-inpainting-0.1).
+- Speech-to-text and translation: [Whisper Large v3](https://huggingface.co/openai/whisper-large-v3).
 
 Please have a look at ``utils/download_models.py`` to see where those models are loaded from.
 

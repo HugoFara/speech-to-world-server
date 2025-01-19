@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "speech_to_world_hugofara"
+version = "0.0.1"
+authors = [
+  { name="Hugo Fara", email="contact@hugofara.net" },
+]
+description = "A pipeline to create environments with Generative AI"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+]
+keywords = ["Gen AI", "text-to-image", "image-to-image"]
+
+[project.urls]
+Homepage = "https://github.com/HugoFara/speech-to-world-server"
+Repository = "https://github.com/HugoFara/speech-to-world-server"
+Issues = "https://github.com/HugoFara/speech-to-world-server/issues"
