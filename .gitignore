@@ -233,13 +233,13 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 # Do not save this folder (mainly used for AI generated content)
-/speech_to_world/outputs/
-/speech_to_world/asr/outputs/
-/speech_to_world/environment/outputs/
-/speech_to_world/skybox/outputs/
+/src/speech_to_world_hugofara/outputs/
+/src/speech_to_world_hugofara/asr/outputs/
+/src/speech_to_world_hugofara/environment/outputs/
+/src/speech_to_world_hugofara/skybox/outputs/
 
 # Configuration is private
 /api.json
 
 # Mask is easily regenerated
-/speech_to_world/skybox/mask.png
+/src/speech_to_world_hugofara/skybox/mask.png
