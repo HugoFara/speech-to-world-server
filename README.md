@@ -83,10 +83,10 @@ or to install the module locally.
 
 The most common use cases are the following:
 
-* Generate a new image with ``python -m skybox.diffusion``.
-* Download all models with ``python -m utils.download_models``. 
+* Generate a new image with ``python -m speech_to_world_hugofara.skybox.diffusion``.
+* Download all models with ``python -m speech_to_world_hugofara.utils.download_models``. 
 If you don't do it the models will be downloaded at run time which may be very slow.
-* Start the server with ``python -m server.run``.
+* Start the server with ``python -m speech_to_world_hugofara.server.run``.
 
 Next is the detail for special files.
 
@@ -156,7 +156,7 @@ The most significant configuration data are "serverIp" and "serverPort" as they 
 ## Start as a TCP server
 
 A TCP server can be started in order to offload the AI part from the application thread. 
-Just launch `python -m server.run`. The server [configuration](#configuration) is defined in `api.json`.
+Just launch `python -m speech_to_world_hugofara.server.run`. The server [configuration](#configuration) is defined in `api.json`.
 The communication is handled in JSON format, with a strong HTTP style.
 
 To connect to the server from another computer on the same network, you need to open a port. 
