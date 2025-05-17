@@ -51,7 +51,10 @@ def get_configuration_data():
     if os.path.exists("api.json"):
         config_file_path = "api.json"
     else:
-        config_file_path = os.path.join(os.path.dirname(__file__), "../api.json")
+        config_file_path = os.path.join(
+            os.path.dirname(__file__),
+            "../../../api.json"
+        )
     with open(config_file_path, encoding="utf-8") as file:
         configuration_data = json.load(file)
     return configuration_data
